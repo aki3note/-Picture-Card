@@ -53,13 +53,15 @@ def art_page():
         .card-text {
     font-size: 120px;
     font-weight: bold;
-    text-align: left; /* ← center から left に変更 */
+    text-align: left;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* ← 左寄せに */
+    justify-content: flex-start;
     height: 100%;
-    margin-left: -80px; /* ← 追加で左へずらす */
+    margin-left: -60px;
+    min-width: 300px;  /* ← 追加：短い文字でもある程度スペースを取る */
 }
+
 
         .fixed-button {
             position: fixed;
