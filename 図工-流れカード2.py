@@ -28,36 +28,45 @@ def art_page():
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%82%93%E3%81%97%E3%82%87%E3%81%86.png?raw=true"
     ]
 
-    texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
+    # HTML＋CSSで画像全体クリック可能なボタンを作る
+    st.markdown(
+        f"""
+        <form action="" method="post">
+            <button name="next_card" type="submit" style="
+                border: none;
+                background: none;
+                padding: 0;
+                width: 100%;
+            ">
+                <img src="{img_paths[st.session_state.img_index]}" style="max-width: 400px; display: block; margin: auto;" />
+            </button>
+        </form>
+        """,
+        unsafe_allow_html=True
+    )
 
-    cols = st.columns([2, 3])
-    with cols[0]:
-        if st.button("", key="img_click"):
-            st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-        st.image(img_paths[st.session_state.img_index], width=300)  # 横幅を制限して見やすく
+    # POSTで送信されたときだけインデックス進める
+    if st.session_state.get("_submitted"):
+        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
+        st.session_state._submitted = False  # リセット
 
-    with cols[1]:
-        st.markdown(
-            f"""
-            <div style='
-                font-size: 64px;
-                font-weight: bold;
-                height: 300px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 12px;
-                background-color: #f0f0f0;
-            '>
-                {texts[st.session_state.img_index]}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    # フォーム送信検出用（非表示でPOST受信を確認）
+    js = """
+    <script>
+    const form = window.parent.document.querySelector('form');
+    form.onsubmit = function() {
+        window.parent.postMessage("next", "*");
+    }
+    </script>
+    """
+    st.markdown(js, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    # JSからのメッセージを受けてSessionStateを書き換える
+    st.experimental_data_editor({"_submitted": True}, key="editor", disabled=True)
+
     if st.button("← 教科選択に戻る"):
         st.session_state.page = "menu"
         st.experimental_rerun()
 
 main()
+
