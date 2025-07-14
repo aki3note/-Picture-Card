@@ -32,13 +32,21 @@ def art_page():
 
     cols = st.columns([2, 3])
     with cols[0]:
-        st.image(img_paths[st.session_state.img_index], use_container_width=True)
+        # 画像を左に詰めて表示（余白20px）
+        st.markdown(
+            f"""
+            <div style='margin-left: 20px;'>
+                <img src="{img_paths[st.session_state.img_index]}" style="width:100%; max-width:400px;" />
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with cols[1]:
         st.markdown(
             f"""
             <div style='
-                font-size: 64px;
+                font-size: 96px;
                 font-weight: bold;
                 height: 100%;
                 display: flex;
@@ -54,16 +62,11 @@ def art_page():
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    col_back, col_spacer, col_next = st.columns([1, 8, 1])
-    with col_back:
-        if st.button("←", use_container_width=True):
-            st.session_state.page = "menu"
-            st.experimental_rerun()
+    # 右下に「→」ボタンだけ配置
+    col_spacer, col_next = st.columns([10, 1])
     with col_next:
         if st.button("→", use_container_width=True):
             st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
 main()
-
-
 
