@@ -43,7 +43,6 @@ def art_page():
             min-height: 80vh;
             gap: 50px;
             position: relative;
-            z-index: 1;
         }
         .card-img {
             width: 35%;
@@ -60,24 +59,23 @@ def art_page():
             margin-left: -60px;
             min-width: 400px;
         }
-        .fullscreen-button {
+        /* 透明の全画面ボタン */
+        div[data-testid="stButton"] button.fullscreen-button {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             opacity: 0;
-            z-index: 9999;
-            border: none;
-            background: none;
             cursor: pointer;
+            z-index: 9999;
         }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    # 表示（画像＋文字）
+    # メイン表示
     st.markdown(
         f"""
         <div class="content-row">
@@ -88,24 +86,8 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # 透明全画面ボタンを埋め込む → クリックで次へ
-    submitted = st.form(key="touch_form")
-    with submitted:
-        st.markdown(
-            """
-            <button class="fullscreen-button" type="submit"></button>
-            """,
-            unsafe_allow_html=True
-        )
-
-    # 画面が再描画されたとき（タップ後）にインデックス進める
-    if "last_click" not in st.session_state:
-        st.session_state.last_click = 0
-
-    if st.session_state.last_click == 0:
-        st.session_state.last_click = 1  # 初期化だけ
-    else:
+    # Streamlitボタン（透明）を画面全体に重ねる
+    if st.button(" ", key="tap_next"):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-        st.session_state.last_click = 0
 
 main()
