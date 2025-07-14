@@ -41,13 +41,13 @@ def art_page():
             gap: 30px;
         }
         .card-img {
-            width: 25%;
+            width: 60%;
             max-width: 500px;
             margin-left: 0px;
             padding-left: 0px;
         }
         .card-text {
-            font-size: 120px;
+            font-size: 130px;
             font-weight: bold;
             text-align: center;
         }
