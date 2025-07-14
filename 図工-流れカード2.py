@@ -12,7 +12,7 @@ def main():
         st.header("教科を選んでください")
         if st.button("図工"):
             st.session_state.page = "art"
-            st.experimental_rerun()
+            st.rerun()
         for i in range(1, 4):
             st.button(f"教科{i}（未設定）")
     elif st.session_state.page == "art":
