@@ -1,7 +1,7 @@
 import streamlit as st
 
 def main():
-    st.set_page_config(page_title="絵カードアプリ", layout="wide")  # iPad横画面対応
+    st.image(img_paths[st.session_state.img_index], use_container_width=True) # iPad横画面対応
     st.title("絵カードアプリ")
 
     page = st.session_state.get("page", "menu")
