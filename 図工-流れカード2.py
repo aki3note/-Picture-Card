@@ -59,8 +59,7 @@ def art_page():
     justify-content: flex-start;
     height: 100%;
     margin-left: -60px;
-    min-width: 300px;   /* 標準 */
-    max-width: 400px;   /* 長すぎる文字対策 */
+    min-width: 400px;   /* 標準 */
 
 }
 
