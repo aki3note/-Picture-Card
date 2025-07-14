@@ -41,7 +41,7 @@ def art_page():
             gap: 30px;
         }
         .card-img {
-            width: 75%;
+            width: 25%;
             max-width: 500px;
             margin-left: 0px;
             padding-left: 0px;
