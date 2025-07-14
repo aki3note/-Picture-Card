@@ -51,14 +51,16 @@ def art_page():
             padding-left: 0px;
         }
         .card-text {
-            font-size: 120px;
-            font-weight: bold;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
+    font-size: 120px;
+    font-weight: bold;
+    text-align: left; /* ← center から left に変更 */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* ← 左寄せに */
+    height: 100%;
+    margin-left: -60px; /* ← 追加で左へずらす */
+}
+
         .fixed-button {
             position: fixed;
             top: 50%;
