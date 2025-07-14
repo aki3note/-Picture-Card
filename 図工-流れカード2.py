@@ -2,9 +2,7 @@ import streamlit as st
 
 def main():
     st.set_page_config(page_title="絵カードアプリ", layout="wide")
-    st.title("絵カードアプリ")
 
-    # img_indexの初期化をここに移動（どのページでも確実に存在するように）
     if "img_index" not in st.session_state:
         st.session_state.img_index = 0
     if "page" not in st.session_state:
@@ -22,9 +20,6 @@ def main():
         art_page()
 
 def art_page():
-    st.header("図工の絵カード")
-    st.write("画像をタッチすると次のカードに進みます")
-
     img_paths = [
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%9B%E3%81%A4%E3%82%81%E3%81%84.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%98%E3%82%85%E3%82%93%E3%81%B3.png?raw=true",
@@ -39,22 +34,30 @@ def art_page():
     with cols[0]:
         if st.button("", key="img_click"):
             st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-        st.image(img_paths[st.session_state.img_index], use_container_width=True)
+        st.image(img_paths[st.session_state.img_index], width=300)  # 横幅を制限して見やすく
 
     with cols[1]:
         st.markdown(
             f"""
-            <div style='font-size: 48px; font-weight: bold; padding: 40px; text-align: center;'>
+            <div style='
+                font-size: 64px;
+                font-weight: bold;
+                height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                background-color: #f0f0f0;
+            '>
                 {texts[st.session_state.img_index]}
             </div>
             """,
             unsafe_allow_html=True
         )
 
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     if st.button("← 教科選択に戻る"):
         st.session_state.page = "menu"
         st.experimental_rerun()
 
 main()
-
