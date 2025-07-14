@@ -28,6 +28,7 @@ def art_page():
     ]
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
+    # CSSカスタマイズ
     st.markdown(
         """
         <style>
@@ -42,11 +43,12 @@ def art_page():
             justify-content: flex-start;
             min-height: 80vh;
             gap: 50px;
-            position: relative;
         }
         .card-img {
             width: 35%;
             max-width: 500px;
+            margin-left: 0px;
+            padding-left: 0px;
         }
         .card-text {
             font-size: 130px;
@@ -59,23 +61,31 @@ def art_page():
             margin-left: -60px;
             min-width: 400px;
         }
-        /* 透明の全画面ボタン */
-        div[data-testid="stButton"] button.fullscreen-button {
+        .fixed-button {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            opacity: 0;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background-color: #cccccc;
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 50px;
             cursor: pointer;
             z-index: 9999;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    # メイン表示
+    # メイン表示：画像とテキスト
     st.markdown(
         f"""
         <div class="content-row">
@@ -86,8 +96,20 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # Streamlitボタン（透明）を画面全体に重ねる
-    if st.button(" ", key="tap_next"):
+    # Streamlitボタン → JSでスタイル当てて右中央に配置＆丸く＆地味色
+    if st.button("→", key="next"):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
+
+    st.markdown(
+        """
+        <script>
+        const btn = window.parent.document.querySelector('button[kind="secondary"]');
+        if (btn) {
+            btn.classList.add("fixed-button");
+        }
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
 
 main()
