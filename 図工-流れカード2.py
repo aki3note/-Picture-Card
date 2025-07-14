@@ -28,6 +28,7 @@ def art_page():
     ]
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
+    # CSSカスタマイズ
     st.markdown(
         """
         <style>
@@ -35,12 +36,15 @@ def art_page():
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-around;
+            justify-content: space-between;
             min-height: 80vh;
+            gap: 30px;
         }
         .card-img {
-            max-width: 400px;
-            margin-left: 20px;
+            width: 75%;
+            max-width: 500px;
+            margin-left: 0px;
+            padding-left: 0px;
         }
         .card-text {
             font-size: 120px;
@@ -58,6 +62,7 @@ def art_page():
         unsafe_allow_html=True
     )
 
+    # レイアウト：画像＋文字
     st.markdown(
         f"""
         <div class="content-row">
@@ -68,10 +73,11 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # 画面右下に固定された「→」ボタン
+    # 「→」ボタンだけ右下固定
     if st.button("→", key="next", use_container_width=False):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
+    # 右下に固定するJS/CSS適用
     st.markdown(
         """
         <script>
@@ -85,4 +91,3 @@ def art_page():
     )
 
 main()
-
