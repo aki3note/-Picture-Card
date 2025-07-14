@@ -48,7 +48,7 @@ def art_page():
         }
         /* 絵カード画像を左に寄せて拡大 */
         .card-img {
-            width: 70%;
+            width: 60%;
             max-width: 500px;
             margin-left: 0px;
             padding-left: 0px;
