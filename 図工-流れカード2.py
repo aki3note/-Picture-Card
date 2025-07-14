@@ -28,29 +28,42 @@ def art_page():
     ]
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
-    # CSSカスタマイズ
+    # CSSでスタイルを調整
     st.markdown(
         """
         <style>
+        /* 全体の余白を削減（Streamlitのデフォルト左右余白） */
+        .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        /* 横並びの配置調整 */
         .content-row {
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             min-height: 80vh;
-            gap: 30px;
+            gap: 50px;
         }
+        /* 絵カード画像を左に寄せて拡大 */
         .card-img {
-            width: 60%;
+            width: 75%;
             max-width: 500px;
             margin-left: 0px;
             padding-left: 0px;
         }
+        /* テキストを大きく中央に配置 */
         .card-text {
-            font-size: 130px;
+            font-size: 120px;
             font-weight: bold;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
         }
+        /* 右下にボタンを固定 */
         .corner-button {
             position: fixed;
             bottom: 40px;
@@ -62,7 +75,7 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # レイアウト：画像＋文字
+    # レイアウト構成（画像＋文字）
     st.markdown(
         f"""
         <div class="content-row">
@@ -73,11 +86,11 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # 「→」ボタンだけ右下固定
+    # 「→」ボタンで次へ進む（見た目はJSで右下固定）
     if st.button("→", key="next", use_container_width=False):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
-    # 右下に固定するJS/CSS適用
+    # ボタンに右下固定クラスを付与するJS
     st.markdown(
         """
         <script>
@@ -91,3 +104,4 @@ def art_page():
     )
 
 main()
+
