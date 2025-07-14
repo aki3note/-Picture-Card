@@ -28,7 +28,6 @@ def art_page():
     ]
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
-    # CSSカスタマイズ
     st.markdown(
         """
         <style>
@@ -43,52 +42,42 @@ def art_page():
             justify-content: flex-start;
             min-height: 80vh;
             gap: 50px;
+            position: relative;
+            z-index: 1;
         }
         .card-img {
             width: 35%;
             max-width: 500px;
-            margin-left: 0px;
-            padding-left: 0px;
         }
         .card-text {
-    font-size: 130px;
-    font-weight: bold;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100%;
-    margin-left: -60px;
-    min-width: 400px;   /* 標準 */
-
-}
-
-
-        .fixed-button {
-            position: fixed;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            background-color: #cccccc;
-            color: black;
-            font-size: 24px;
+            font-size: 130px;
             font-weight: bold;
-            text-align: center;
-            line-height: 50px;
-            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            margin-left: -60px;
+            min-width: 400px;
+        }
+        .fullscreen-button {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
             z-index: 9999;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+            background: none;
+            cursor: pointer;
         }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    # メイン表示：画像とテキスト
+    # 表示（画像＋文字）
     st.markdown(
         f"""
         <div class="content-row">
@@ -99,20 +88,24 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # Streamlitボタン → JSでスタイル当てて右中央に配置＆丸く＆地味色
-    if st.button("→", key="next"):
-        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
+    # 透明全画面ボタンを埋め込む → クリックで次へ
+    submitted = st.form(key="touch_form")
+    with submitted:
+        st.markdown(
+            """
+            <button class="fullscreen-button" type="submit"></button>
+            """,
+            unsafe_allow_html=True
+        )
 
-    st.markdown(
-        """
-        <script>
-        const btn = window.parent.document.querySelector('button[kind="secondary"]');
-        if (btn) {
-            btn.classList.add("fixed-button");
-        }
-        </script>
-        """,
-        unsafe_allow_html=True
-    )
+    # 画面が再描画されたとき（タップ後）にインデックス進める
+    if "last_click" not in st.session_state:
+        st.session_state.last_click = 0
+
+    if st.session_state.last_click == 0:
+        st.session_state.last_click = 1  # 初期化だけ
+    else:
+        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
+        st.session_state.last_click = 0
 
 main()
