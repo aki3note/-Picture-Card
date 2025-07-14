@@ -20,7 +20,7 @@ def main():
 
 def art_page():
     img_paths = [
-        "https://github.com/aki3note/-Picture-Card/blob/main/%E7%94%BB%E5%83%8F/%E5%9B%B3%E5%B7%A5-%E3%81%9B%E3%81%A4%E3%82%81%E3%81%84.jpg?raw=true",
+        "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%9B%E3%81%A4%E3%82%81%E3%81%84.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%98%E3%82%85%E3%82%93%E3%81%B3.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%A4%E3%81%8F%E3%82%8B.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%81%9F%E3%81%A5%E3%81%91.png?raw=true",
@@ -32,12 +32,10 @@ def art_page():
     st.markdown(
         """
         <style>
-        /* 全体の余白を削減（Streamlitのデフォルト左右余白） */
         .block-container {
             padding-left: 1rem !important;
             padding-right: 1rem !important;
         }
-        /* 横並びの配置調整 */
         .content-row {
             display: flex;
             flex-direction: row;
@@ -46,14 +44,12 @@ def art_page():
             min-height: 80vh;
             gap: 50px;
         }
-        /* 絵カード画像を左に寄せて拡大 */
         .card-img {
-            width: 60%;
+            width: 75%;
             max-width: 500px;
             margin-left: 0px;
             padding-left: 0px;
         }
-        /* テキストを大きく中央に配置 */
         .card-text {
             font-size: 120px;
             font-weight: bold;
@@ -63,12 +59,23 @@ def art_page():
             justify-content: center;
             height: 100%;
         }
-        /* 右下にボタンを固定 */
-        .corner-button {
+        .side-button {
             position: fixed;
-            bottom: 40px;
-            right: 40px;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background-color: #ff4b4b;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
             z-index: 9999;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         </style>
         """,
@@ -86,22 +93,23 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # 「→」ボタンで次へ進む（見た目はJSで右下固定）
-    if st.button("→", key="next", use_container_width=False):
-        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-
-    # ボタンに右下固定クラスを付与するJS
+    # 「→」ボタン（HTMLとして左中央に固定）
     st.markdown(
         """
+        <button class="side-button" onclick="parent.postMessage({streamlitMessageType: 'streamlit:setComponentValue', value: 'next'}, '*')">→</button>
         <script>
-        const btn = window.parent.document.querySelector('button[kind="secondary"]');
-        if (btn) {
-            btn.classList.add("corner-button");
-        }
+        window.addEventListener("message", (event) => {
+            if (event.data && event.data.type === "streamlit:setComponentValue" && event.data.value === "next") {
+                window.parent.location.reload();
+            }
+        });
         </script>
         """,
         unsafe_allow_html=True
     )
 
-main()
+    # Python側でボタンイベント検出（reloadでイベントは消えるのでstreamlitでやる場合は↓が確実）
+    if st.button("進む（補助用）", key="hidden", help="JSが使えないとき用", disabled=True):
+        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
+main()
