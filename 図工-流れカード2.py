@@ -28,27 +28,42 @@ def art_page():
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%82%93%E3%81%97%E3%82%87%E3%81%86.png?raw=true"
     ]
 
+    texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
+
+    cols = st.columns([2, 3])
+    with cols[0]:
+        st.image(img_paths[st.session_state.img_index], use_container_width=True)
+
+    with cols[1]:
+        st.markdown(
+            f"""
+            <div style='
+                font-size: 64px;
+                font-weight: bold;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            '>
+                {texts[st.session_state.img_index]}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # 画像をHTMLでボタン風に表示し、クリックで次の画像へ
-    if st.button(
-        label="",
-        key="image_click",
-        help="画像をタップして次へ",
-    ):
-        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-
-    # 画像表示（ボタンとは別に画像を出すと2度表示になるので注意）
-    st.image(
-        img_paths[st.session_state.img_index],
-        width=400
-    )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("← 教科選択に戻る"):
-        st.session_state.page = "menu"
-        st.experimental_rerun()
+    col_back, col_spacer, col_next = st.columns([1, 8, 1])
+    with col_back:
+        if st.button("←", use_container_width=True):
+            st.session_state.page = "menu"
+            st.experimental_rerun()
+    with col_next:
+        if st.button("→", use_container_width=True):
+            st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
 main()
+
 
 
