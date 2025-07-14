@@ -28,7 +28,7 @@ def art_page():
     ]
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
-    # CSSでスタイルを調整
+    # CSSカスタマイズ
     st.markdown(
         """
         <style>
@@ -59,18 +59,19 @@ def art_page():
             justify-content: center;
             height: 100%;
         }
-        .side-button {
+        .fixed-button {
             position: fixed;
-            left: 20px;
             top: 50%;
+            right: 20px;
             transform: translateY(-50%);
             width: 50px;
             height: 50px;
             border-radius: 50%;
             border: none;
-            background-color: #ff4b4b;
-            color: white;
+            background-color: #cccccc;
+            color: black;
             font-size: 24px;
+            font-weight: bold;
             text-align: center;
             line-height: 50px;
             cursor: pointer;
@@ -82,7 +83,7 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # レイアウト構成（画像＋文字）
+    # メイン表示：画像とテキスト
     st.markdown(
         f"""
         <div class="content-row">
@@ -93,23 +94,20 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # 「→」ボタン（HTMLとして左中央に固定）
+    # Streamlitボタン → JSでスタイル当てて右中央に配置＆丸く＆地味色
+    if st.button("→", key="next"):
+        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
+
     st.markdown(
         """
-        <button class="side-button" onclick="parent.postMessage({streamlitMessageType: 'streamlit:setComponentValue', value: 'next'}, '*')">→</button>
         <script>
-        window.addEventListener("message", (event) => {
-            if (event.data && event.data.type === "streamlit:setComponentValue" && event.data.value === "next") {
-                window.parent.location.reload();
-            }
-        });
+        const btn = window.parent.document.querySelector('button[kind="secondary"]');
+        if (btn) {
+            btn.classList.add("fixed-button");
+        }
         </script>
         """,
         unsafe_allow_html=True
     )
-
-    # Python側でボタンイベント検出（reloadでイベントは消えるのでstreamlitでやる場合は↓が確実）
-    if st.button("進む（補助用）", key="hidden", help="JSが使えないとき用", disabled=True):
-        st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
 main()
