@@ -1,12 +1,16 @@
 import streamlit as st
 
 def main():
-    st.image(img_paths[st.session_state.img_index], use_container_width=True) # iPad横画面対応
+    st.set_page_config(page_title="絵カードアプリ", layout="wide")
     st.title("絵カードアプリ")
 
-    page = st.session_state.get("page", "menu")
+    # img_indexの初期化をここに移動（どのページでも確実に存在するように）
+    if "img_index" not in st.session_state:
+        st.session_state.img_index = 0
+    if "page" not in st.session_state:
+        st.session_state.page = "menu"
 
-    if page == "menu":
+    if st.session_state.page == "menu":
         st.header("教科を選んでください")
         if st.button("図工"):
             st.session_state.page = "art"
@@ -14,7 +18,7 @@ def main():
         for i in range(1, 4):
             st.button(f"教科{i}（未設定）")
 
-    elif page == "art":
+    elif st.session_state.page == "art":
         art_page()
 
 def art_page():
@@ -31,15 +35,11 @@ def art_page():
 
     texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
 
-    if "img_index" not in st.session_state:
-        st.session_state.img_index = 0
-
-    # 横並び（左：画像、右：説明）
     cols = st.columns([2, 3])
     with cols[0]:
         if st.button("", key="img_click"):
             st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
-        st.image(img_paths[st.session_state.img_index], use_column_width=True)
+        st.image(img_paths[st.session_state.img_index], use_container_width=True)
 
     with cols[1]:
         st.markdown(
@@ -57,3 +57,4 @@ def art_page():
         st.experimental_rerun()
 
 main()
+
