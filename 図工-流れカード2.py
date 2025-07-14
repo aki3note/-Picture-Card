@@ -51,7 +51,7 @@ def art_page():
             padding-left: 0px;
         }
         .card-text {
-    font-size: 120px;
+    font-size: 130px;
     font-weight: bold;
     text-align: left;
     display: flex;
