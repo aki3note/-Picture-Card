@@ -58,7 +58,7 @@ def art_page():
     align-items: center;
     justify-content: flex-start; /* ← 左寄せに */
     height: 100%;
-    margin-left: -60px; /* ← 追加で左へずらす */
+    margin-left: -80px; /* ← 追加で左へずらす */
 }
 
         .fixed-button {
