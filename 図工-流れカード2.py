@@ -26,9 +26,9 @@ def art_page():
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%81%9F%E3%81%A5%E3%81%91.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%82%93%E3%81%97%E3%82%87%E3%81%86.png?raw=true"
     ]
-    texts = ["せつめい", "じゅんび", "つくる", "かたづけ", "かんしょう"]
+    texts = ["せつめい", "じゅんび", "  つくる", " かたづけ", "かんしょう"]
 
-    # CSSカスタマイズ
+    # CSS
     st.markdown(
         """
         <style>
@@ -96,7 +96,7 @@ def art_page():
         unsafe_allow_html=True
     )
 
-    # Streamlitボタン → JSでスタイル当てて右中央に配置＆丸く＆地味色
+    # Streamlitボタン
     if st.button("→", key="next"):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
