@@ -5,17 +5,13 @@ from reportlab.lib.pagesizes import A4
 from io import BytesIO
 
 st.set_page_config(page_title="GIFコマ割りPDF", layout="centered")
-
 st.title("🎞 GIFコマ割りPDFジェネレーター")
-st.caption("GIFをアップロードして、各コマをPDFに変換します（外部送信なし）")
+st.caption("アニメーションGIFをアップロード → コマ割りPDF生成")
 
-uploaded_file = st.file_uploader("📁 GIFファイルを選択してください", type=["gif"])
+uploaded_file = st.file_uploader("📁 GIFファイルを選んでください", type=["gif"])
 
 def extract_frames(gif_image):
-    frames = []
-    for frame in ImageSequence.Iterator(gif_image):
-        frames.append(frame.convert("RGB"))
-    return frames
+    return [frame.copy().convert("RGB") for frame in ImageSequence.Iterator(gif_image)]
 
 def create_comic_pdf(frames, images_per_row=3, images_per_col=3):
     pdf_buffer = BytesIO()
@@ -32,7 +28,7 @@ def create_comic_pdf(frames, images_per_row=3, images_per_col=3):
         col = idx % images_per_row
         row = (idx // images_per_row) % images_per_col
 
-        if idx % (images_per_row * images_per_col) == 0 and idx != 0:
+        if idx != 0 and idx % (images_per_row * images_per_col) == 0:
             c.showPage()
 
         resized = frame.resize((int(img_width), int(img_height)))
@@ -45,19 +41,17 @@ def create_comic_pdf(frames, images_per_row=3, images_per_col=3):
     pdf_buffer.seek(0)
     return pdf_buffer
 
-if uploaded_file is not None:
+if uploaded_file:
     try:
         gif = Image.open(uploaded_file)
-        frames = extract_frames(gif)
-        st.success(f"{len(frames)} フレームを抽出しました。")
+        if getattr(gif, "is_animated", False) is False:
+            st.warning("これはアニメーションGIFではありません")
+        else:
+            frames = extract_frames(gif)
+            st.success(f"{len(frames)}フレームを抽出しました")
 
-        if st.button("📄 PDFを生成する"):
-            pdf_bytes = create_comic_pdf(frames)
-            st.download_button(
-                label="⬇️ PDFをダウンロード",
-                data=pdf_bytes,
-                file_name="komawari_output.pdf",
-                mime="application/pdf"
-            )
+            if st.button("📄 PDFを生成"):
+                pdf = create_comic_pdf(frames)
+                st.download_button("⬇️ PDFをダウンロード", data=pdf, file_name="komawari.pdf", mime="application/pdf")
     except Exception as e:
-        st.error(f"GIFの読み込みに失敗しました: {e}")
+        st.error(f"エラーが発生しました: {e}")
