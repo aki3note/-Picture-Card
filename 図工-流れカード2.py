@@ -102,6 +102,29 @@ def art_page():
 
     st.markdown(
         """
+           <style>
+    .fixed-button {
+        position: fixed;
+        top: calc(50% - 20px);  /* ← 中央より20px上 */
+        right: 20px;
+        transform: translateY(-50%);
+        width: 60px;             /* ← 10px大きく */
+        height: 60px;
+        border-radius: 50%;
+        border: none;
+        background-color: #cccccc;
+        color: black;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 60px;       /* ← ボタン中央に文字 */
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    </style>
+
+  
         <script>
         const btn = window.parent.document.querySelector('button[kind="secondary"]');
         if (btn) {
