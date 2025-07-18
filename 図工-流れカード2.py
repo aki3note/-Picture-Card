@@ -1,7 +1,7 @@
 import streamlit as st
 
 def main():
-    st.set_page_config(page_title="絵カードアプリ", layout="wide")
+    st.set_page_config(page_title="流れカードアプリ", layout="wide")
 
     if "img_index" not in st.session_state:
         st.session_state.img_index = 0
@@ -26,7 +26,18 @@ def art_page():
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%81%9F%E3%81%A5%E3%81%91.png?raw=true",
         "https://github.com/aki3note/-Picture-Card/blob/main/%E5%9B%B3%E5%B7%A5-%E3%81%8B%E3%82%93%E3%81%97%E3%82%87%E3%81%86.png?raw=true"
     ]
-    texts = ["せつめい", "じゅんび", "  つくる", " かたづけ", "かんしょう"]
+    texts = ["せつめい", "じゅんび", "___ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤつくる", " かたづけ", "かんしょう"]
+
+    for path, text in zip(img_paths, texts):
+    img = Image.open(BytesIO(requests.get(path).content))
+    col1, col2 = st.columns([1, 4])
+    with col1:
+        st.image(img, width=80)
+    with col2:
+        if text == "___":
+            st.markdown(f'<p style="color:white; font-size:20px;">{text}</p>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<p style="font-size:20px;">{text}</p>', unsafe_allow_html=True)
 
     # CSS
     st.markdown(
