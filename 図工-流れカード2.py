@@ -18,6 +18,7 @@ def main():
     elif st.session_state.page == "art":
         art_page()
 
+
 def art_page():
     img_paths = [
         "https://github.com/aki3note/-Picture-Card/blob/main/%E7%94%BB%E5%83%8F/%E5%9B%B3%E5%B7%A5-%E3%81%9B%E3%81%A4%E3%82%81%E3%81%841.png?raw=true",
@@ -61,13 +62,12 @@ def art_page():
             margin-left: -60px;
             min-width: 400px;
         }
-        .fixed-button {
+        .custom-next-button {
             position: fixed;
-            top: 50%;
+            top: calc(50% - 20px); /* 中央より20px上 */
             right: 20px;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
             background-color: #cccccc;
@@ -75,7 +75,7 @@ def art_page():
             font-size: 24px;
             font-weight: bold;
             text-align: center;
-            line-height: 50px;
+            line-height: 60px;
             cursor: pointer;
             z-index: 9999;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -100,39 +100,21 @@ def art_page():
     if st.button("→", key="next"):
         st.session_state.img_index = (st.session_state.img_index + 1) % len(img_paths)
 
+    # JavaScriptで「→」ボタンにCSS適用
     st.markdown(
         """
-           <style>
-    .fixed-button {
-        position: fixed;
-        top: calc(50% - 20px);  /* ← 中央より20px上 */
-        right: 20px;
-        transform: translateY(-50%);
-        width: 60px;             /* ← 10px大きく */
-        height: 60px;
-        border-radius: 50%;
-        border: none;
-        background-color: #cccccc;
-        color: black;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        line-height: 60px;       /* ← ボタン中央に文字 */
-        cursor: pointer;
-        z-index: 9999;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    </style>
-
-  
         <script>
-        const btn = window.parent.document.querySelector('button[kind="secondary"]');
-        if (btn) {
-            btn.classList.add("fixed-button");
-        }
+        const buttons = window.parent.document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            if (btn.innerText.trim() === "→") {
+                btn.classList.add("custom-next-button");
+            }
+        });
         </script>
         """,
         unsafe_allow_html=True
     )
 
+
 main()
+
